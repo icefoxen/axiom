@@ -285,6 +285,5 @@ fn main() {
     h.send(msg);
 
     while target > h.received() {}
-    thread::sleep(time::Duration::from_secs(1));
     system.trigger_and_await_shutdown();
 }

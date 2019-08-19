@@ -2,7 +2,7 @@
 
 set successes 0
 set failures 0
-set runs 100
+set runs 1000
 
 for i in (seq $runs)
     echo "Run $i, $successes success and $failures failed"
