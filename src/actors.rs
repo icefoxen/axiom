@@ -541,7 +541,7 @@ impl Actor {
                 // value if its a Stop message. This is an allows actors that don't need to do
                 // anything special when stopping to ignore processing `Stop`.
                 let mut guard = actor.handler.lock().unwrap();
-                let mut result = (&mut *guard)(actor.aid.clone(), message);
+                let mut result = (&mut *guard)(actor.aid.clone(), &*message);
                 if let Some(m) = message.content_as::<SystemMsg>() {
                     if let SystemMsg::Stop = *m {
                         // Stop the actor anyway.
@@ -738,7 +738,7 @@ impl ActorSystem {
             while !system.data.shutdown_triggered.load(Ordering::Relaxed) {
                 match receiver.receive_await_timeout(thread_timeout) {
                     Err(_) => (), // not an error, just loop and try again.
-                    Ok(actor) => Actor::receive(actor),
+                    Ok(actor) => Actor::receive((*actor).clone()),
                 }
             }
             let (mutex, condvar) = &*system.data.running_thread_count;
